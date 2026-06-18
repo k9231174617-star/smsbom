@@ -162,7 +162,7 @@ async def handle_text(message: types.Message):
         atype = get_attack_type(uid)
         await message.answer(
             f"Введи номер и время атаки в минутах через пробел:\n"
-            f"Пример: \`79123456789 5\` (5 минут)\n\n"
+            f"Пример: `79123456789 5` (5 минут)\n\n"
             f"⚙️ Текущий тип: {atype}\n"
             f"Можешь сменить кнопками ниже 👇"
         )
