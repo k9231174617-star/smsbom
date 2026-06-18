@@ -49,7 +49,12 @@ async def request(session, url, attack_type):
 
 async def async_attacks(number, attack_type):
     async with ClientSession() as session:
-        services = urls(number) + callback_urls(number)
+        # Фильтруем сервисы ДО создания задач — не создаём задачи для неподходящих типов
+        allowed_types = {"MIX": ("SMS", "CALL"), "SMS": ("SMS",), "CALL": ("CALL",)}
+        atypes = allowed_types.get(attack_type, ("SMS", "CALL"))
+        services = [s for s in (urls(number) + callback_urls(number)) if s['info']['attack'] in atypes]
+        if not services:
+            return
         tasks = [ensure_future(request(session, s, attack_type)) for s in services]
         await gather(*tasks)
 
