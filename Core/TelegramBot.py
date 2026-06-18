@@ -82,16 +82,31 @@ async def run_attack(message: types.Message, number: str, minutes: str):
         await message.answer("❌ Время атаки от 1 до 10 минут!")
         return
 
-    active_attacks[user_id] = {"number": number, "minutes": minutes, "status": "running"}
+    # Останавливаем предыдущую атаку пользователя если была
+    if user_id in active_attacks and active_attacks[user_id]["status"] == "running":
+        try:
+            from Core.Run import stop_attacks
+            stop_attacks()
+        except:
+            pass
 
+    attack_type = get_attack_type(user_id)
     from Core.Run import start_async_attacks
     from threading import Thread
     import asyncio
+    import time
 
-    def run():
+    attack_id = int(time.time() * 1000)
+    active_attacks[user_id] = {"number": number, "minutes": minutes, "status": "running", "type": attack_type, "id": attack_id}
+
+    def run(aid):
         try:
-            start_async_attacks(number, minutes)
-            if active_attacks.get(user_id, {}).get("status") == "stopped":
+            start_async_attacks(number, minutes, attack_type=attack_type, stop_previous=True)
+            # Проверяем, не запустили ли новую атаку
+            current = active_attacks.get(user_id, {})
+            if current.get("id") != aid:
+                return
+            if current.get("status") == "stopped":
                 return
             active_attacks[user_id]["status"] = "completed"
             asyncio.run(bot.send_message(
@@ -99,10 +114,14 @@ async def run_attack(message: types.Message, number: str, minutes: str):
                 f"✅ **Атака завершена!**\n\n"
                 f"📱 Номер: `{number}`\n"
                 f"⏱ Длительность: `{minutes} мин.`\n"
+                f"🔀 Тип: {attack_type}\n"
                 f"📊 Статус: ✅ Выполнено",
                 parse_mode="Markdown"
             ))
         except Exception as e:
+            current = active_attacks.get(user_id, {})
+            if current.get("id") != aid:
+                return
             active_attacks[user_id]["status"] = "error"
             try:
                 asyncio.run(bot.send_message(
@@ -113,10 +132,10 @@ async def run_attack(message: types.Message, number: str, minutes: str):
             except:
                 pass
 
-    Thread(target=run, daemon=True).start()
+    Thread(target=run, args=(attack_id,), daemon=True).start()
 
     await message.answer(
-        f"✅ **Атака запущена!**\n📱 Номер: `{number}`\n⏱ Длительность: `{minutes} мин.`\n💣 Сообщения идут непрерывно...",
+        f"✅ **Атака запущена!**\n📱 Номер: `{number}`\n⏱ Длительность: `{minutes} мин.`\n🔀 Тип: {attack_type}\n💣 Сообщения идут непрерывно...",
         reply_markup=main_keyboard()
     )
 

