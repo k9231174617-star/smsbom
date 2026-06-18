@@ -147,22 +147,22 @@ def main(page: Page):
                         try:
                             int(replay.value)
                             if replay.value.isdigit():
-                                if 1 <= int(replay.value) <= 1000:
+                                if 1 <= int(replay.value) <= 10:
                                     if check_config()['attack'] == 'False':
                                         confirmation()
                                     else:
                                         confirmation()
                                 else:
-                                    error('Enter the number of laps, from 1 to 1000!')
+                                    error('Enter attack time from 1 to 10 minutes!')
                                     replay.focus()
                             else:
-                                error('Enter the number of circles without any symbols!')
+                                error('Enter the time without any symbols!')
                                 replay.focus()
                         except:
-                            error('Enter the number of laps!')
+                            error('Enter the attack time!')
                             replay.focus()
                     else:
-                        error('Enter the number of laps!')
+                        error('Enter the attack time!')
                         replay.focus()
                 else:
                     error('Enter the number without any characters!')
@@ -214,7 +214,7 @@ def main(page: Page):
     )
 
     replay = TextField(
-        label='replays',
+        label='minutes',
         width=131,
         text_align='center',
         border_radius=40,

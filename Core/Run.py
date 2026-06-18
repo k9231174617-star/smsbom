@@ -36,9 +36,15 @@ async def async_attacks(number):
         tasks = [ensure_future(request(session, service)) for service in services]
         await gather(*tasks)
 
-def start_async_attacks(number, replay):
-    for _ in range(int(replay)):
+def start_async_attacks(number, minutes):
+    import time
+    start_time = time.time()
+    duration = float(minutes) * 60
+    while True:
         if stop_event.is_set():
+            break
+        elapsed = time.time() - start_time
+        if elapsed >= duration:
             break
         run(async_attacks(number))
 

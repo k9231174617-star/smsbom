@@ -36,10 +36,10 @@ async def start_command(message: types.Message):
 async def help_command(message: types.Message):
     await message.answer(
         "📖 **Справка**\n\n"
-        "▪️ Нажми **💣 Атака** и введи номер с количеством повторов\n"
-        "▪️ Пример: `79123456789 5`\n"
+        "▪️ Нажми **💣 Атака** и введи номер и время атаки\n"
+        "▪️ Пример: `79123456789 5` (5 минут)\n"
         "▪️ Нажми **⏹ Стоп** чтобы остановить\n\n"
-        "Повторов: от 1 до 1000"
+        "Время атаки: от 1 до 10 минут"
     )
 
 @dp.message(Command("attack"))
@@ -48,24 +48,25 @@ async def attack_command(message: types.Message):
     args = message.text.split()
     if len(args) < 3:
         await message.answer(
-            "❌ Введи номер и количество повторов.\n"
+            "❌ Введи номер и время атаки в минутах.\n"
             "Пример: `/attack 79123456789 5`\n"
             "Или просто напиши: `79123456789 5`"
         )
         return
     await run_attack(message, args[1], args[2])
 
-async def run_attack(message: types.Message, number: str, replay: str):
+async def run_attack(message: types.Message, number: str, minutes: str):
     user_id = message.from_user.id
     chat_id = message.chat.id
-    if not number.isdigit() or not replay.isdigit():
-        await message.answer("❌ Номер и повторы должны быть числами!")
+    if not number.isdigit() or not minutes.isdigit():
+        await message.answer("❌ Номер и время должны быть числами!")
         return
-    if int(replay) < 1 or int(replay) > 1000:
-        await message.answer("❌ Повторов от 1 до 1000!")
+    mins = int(minutes)
+    if mins < 1 or mins > 10:
+        await message.answer("❌ Время атаки от 1 до 10 минут!")
         return
 
-    active_attacks[user_id] = {"number": number, "replay": replay, "status": "running"}
+    active_attacks[user_id] = {"number": number, "minutes": minutes, "status": "running"}
 
     from Core.Run import start_async_attacks
     from threading import Thread
@@ -73,7 +74,7 @@ async def run_attack(message: types.Message, number: str, replay: str):
 
     def run():
         try:
-            start_async_attacks(number, replay)
+            start_async_attacks(number, minutes)
             if active_attacks.get(user_id, {}).get("status") == "stopped":
                 return
             active_attacks[user_id]["status"] = "completed"
@@ -81,7 +82,7 @@ async def run_attack(message: types.Message, number: str, replay: str):
                 chat_id,
                 f"✅ **Атака завершена!**\n\n"
                 f"📱 Номер: `{number}`\n"
-                f"🔄 Повторов: `{replay}`\n"
+                f"⏱ Длительность: `{minutes} мин.`\n"
                 f"📊 Статус: ✅ Выполнено",
                 parse_mode="Markdown"
             ))
@@ -99,7 +100,7 @@ async def run_attack(message: types.Message, number: str, replay: str):
     Thread(target=run, daemon=True).start()
 
     await message.answer(
-        f"✅ **Атака запущена!**\nНомер: `{number}`\nПовторов: `{replay}`",
+        f"✅ **Атака запущена!**\n📱 Номер: `{number}`\n⏱ Длительность: `{minutes} мин.`\n💣 Сообщения идут непрерывно...",
         reply_markup=main_keyboard()
     )
 
@@ -122,7 +123,7 @@ async def stop_command(message: types.Message):
 async def handle_text(message: types.Message):
     text = message.text.strip()
     if text == "💣 Атака":
-        await message.answer("Введи номер и количество повторов через пробел:\nПример: `79123456789 5`")
+        await message.answer("Введи номер и время атаки в минутах через пробел:\nПример: `79123456789 5` (5 минут)")
     elif text == "⏹ Стоп":
         await stop_command(message)
     elif text == "📖 Помощь":
@@ -130,14 +131,14 @@ async def handle_text(message: types.Message):
     elif text == "ℹ️ О проекте":
         await start_command(message)
     else:
-        # Проверяем, не ввёл ли пользователь номер и повторы
+        # Проверяем, не ввёл ли пользователь номер и время
         parts = text.split()
         if len(parts) == 2 and parts[0].isdigit() and parts[1].isdigit():
             await run_attack(message, parts[0], parts[1])
         else:
             await message.answer(
                 "Используй кнопки ниже 👇 или команды:\n"
-                "/attack <номер> <повторы>\n/stop\n/help",
+                "/attack <номер> <минуты>\n/stop\n/help",
                 reply_markup=main_keyboard()
             )
 
