@@ -90,7 +90,7 @@ async def stop_command(message: types.Message):
 
 # Запуск бота
 async def start_telegram_bot():
-    await dp.start_polling(bot)
+    await dp.start_polling(bot, handle_signals=False)
 
 # Остановка бота
 async def stop_telegram_bot():

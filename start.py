@@ -13,9 +13,13 @@ def run_telegram_bot():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 9876))
 
-    # Telegram bot в отдельном потоке со своим event loop'ом
-    t = threading.Thread(target=run_telegram_bot, daemon=True)
-    t.start()
+    # Telegram bot в отдельном потоке (если есть токен)
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+    if token:
+        t = threading.Thread(target=run_telegram_bot, daemon=True)
+        t.start()
+    else:
+        print("TELEGRAM_BOT_TOKEN не задан, Telegram бот не запущен")
 
     # Веб-интерфейс (Flet) — блокирующий вызов
     Start(web=True, port=port)
