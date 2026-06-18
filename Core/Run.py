@@ -2,6 +2,7 @@ from asyncio import ensure_future, gather, run
 from aiohttp import ClientSession
 
 from Core.Attack.Services import urls
+from Core.Attack.Callback_Services import callback_urls
 
 # Флаг остановки (threading-safe)
 import threading
@@ -48,7 +49,7 @@ async def request(session, url, attack_type):
 
 async def async_attacks(number, attack_type):
     async with ClientSession() as session:
-        services = urls(number)
+        services = urls(number) + callback_urls(number)
         tasks = [ensure_future(request(session, s, attack_type)) for s in services]
         await gather(*tasks)
 
