@@ -178,17 +178,6 @@ async def run_attack(message: types.Message, numbers_str: str, minutes: str,
             reply_markup=main_keyboard()
         )
         return
-        result = asyncio.run(async_attacks(numbers, "LOOKUP", get_user_filter(user_id), email))
-        await message.answer(
-            f"🔍 **Поиск завершён**\n\n"
-            f"📱 Номер: `{numbers[0]}`\n"
-            f"🔍 Запросов: {result.get('total', 0)}\n"
-            f"✅ Найдено: {result.get('success', 0)}\n"
-            f"❌ Ошибок: {result.get('fail', 0)}",
-            reply_markup=main_keyboard()
-        )
-        return
-
     if attack_type == "EMAIL":
         email = numbers_str
         numbers = ["0000000000"]
