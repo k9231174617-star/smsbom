@@ -146,11 +146,38 @@ async def run_attack(message: types.Message, numbers_str: str, minutes: str,
     if attack_type == "LOOKUP":
         # Разовый поиск — без таймера
         await message.answer("🔍 **Поиск запущен...**", reply_markup=main_keyboard())
-        from Core.Run import async_attacks
-        numbers = [n.replace('+', '') for n in re.findall(r'\+?\d+', numbers_str)]
+        numbers = [n.replace("+", "") for n in re.findall(r"\+?\d+", numbers_str)]
         if not numbers:
             await message.answer("❌ Некорректный номер!")
             return
+
+        from Core.Attack.Services_Lookup import lookup_urls
+        from Core.Run import make_request
+        from aiohttp import ClientSession, ClientTimeout
+        from asyncio import ensure_future, gather
+
+        timeout = ClientTimeout(total=15)
+        async with ClientSession(timeout=timeout) as session:
+            tasks = []
+            for url_data in lookup_urls(numbers[0]):
+                tasks.append(ensure_future(make_request(session, url_data, "LOOKUP")))
+            if tasks:
+                results = await gather(*tasks, return_exceptions=True)
+            else:
+                results = []
+
+        ok = sum(1 for r in results if r is not None and isinstance(r, tuple) and r[0] < 400)
+        fail = sum(1 for r in results if r is None or (isinstance(r, tuple) and r[0] >= 400))
+
+        await message.answer(
+            f"🔍 **Поиск по номеру** `{numbers[0]}`\n\n"
+            f"🔍 Запросов: {len(results)}\n"
+            f"✅ Ответили: {ok}\n"
+            f"❌ Ошибок: {fail}\n\n"
+            f"💡 Данные в service_registry.json",
+            reply_markup=main_keyboard()
+        )
+        return
         result = asyncio.run(async_attacks(numbers, "LOOKUP", get_user_filter(user_id), email))
         await message.answer(
             f"🔍 **Поиск завершён**\n\n"
