@@ -12,22 +12,38 @@ dp = Dispatcher()
 
 active_attacks = {}
 
+# Настройки пользователя (тип атаки)
+user_settings = {}
+
 # Клавиатура с кнопками команд
 def main_keyboard():
     kb = [
         [KeyboardButton(text="💣 Атака"), KeyboardButton(text="⏹ Стоп")],
+        [KeyboardButton(text="📱 SMS"), KeyboardButton(text="📞 Звонки"), KeyboardButton(text="🔀 MIX")],
         [KeyboardButton(text="📖 Помощь"), KeyboardButton(text="ℹ️ О проекте")]
     ]
     return ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
 
+def get_attack_type(user_id):
+    return user_settings.get(user_id, "MIX")
+
+def set_attack_type(user_id, atype):
+    user_settings[user_id] = atype
+
 @dp.message(Command("start"))
 async def start_command(message: types.Message):
+    uid = message.from_user.id
+    atype = get_attack_type(uid)
     await message.answer(
-        "💣 **Добро пожаловать в Grobovsheke-SmsBomber!**\n\n"
-        "Используй кнопки ниже или команды:\n"
-        "• 💣 Атака — запустить атаку\n"
-        "• ⏹ Стоп — остановить\n"
-        "• 📖 Помощь — справка\n\n"
+        f"💣 **Добро пожаловать в Grobovsheke-SmsBomber!**\n\n"
+        f"Используй кнопки ниже или команды:\n"
+        f"• 💣 Атака — запустить атаку\n"
+        f"• ⏹ Стоп — остановить\n"
+        f"• 📖 Помощь — справка\n\n"
+        f"⚙️ Текущий тип атаки: **{atype}**\n"
+        f"📱 SMS — только сообщения\n"
+        f"📞 Звонки — только звонки\n"
+        f"🔀 MIX — всё сразу\n\n"
         "⚠️ Только в образовательных целях!",
         reply_markup=main_keyboard()
     )
@@ -122,8 +138,20 @@ async def stop_command(message: types.Message):
 @dp.message()
 async def handle_text(message: types.Message):
     text = message.text.strip()
+    uid = message.from_user.id
     if text == "💣 Атака":
-        await message.answer("Введи номер и время атаки в минутах через пробел:\nПример: `79123456789 5` (5 минут)")
+        atype = get_attack_type(uid)
+        await message.answer(
+            f"Введи номер и время атаки в минутах через пробел:\n"
+            f"Пример: \`79123456789 5\` (5 минут)\n\n"
+            f"⚙️ Текущий тип: {atype}\n"
+            f"Можешь сменить кнопками ниже 👇"
+        )
+    elif text in ("📱 SMS", "📞 Звонки", "🔀 MIX"):
+        type_map = {"📱 SMS": "SMS", "📞 Звонки": "CALL", "🔀 MIX": "MIX"}
+        atype = type_map[text]
+        set_attack_type(uid, atype)
+        await message.answer(f"✅ Тип атаки изменён на **{atype}**", reply_markup=main_keyboard())
     elif text == "⏹ Стоп":
         await stop_command(message)
     elif text == "📖 Помощь":

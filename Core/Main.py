@@ -108,7 +108,7 @@ def main(page: Page):
         page.update()
 
         change_config('attack', 'True')
-        start_async_attacks(number.value, replay.value)
+        start_async_attacks(number.value, replay.value, attack_type=type_attack.value)
         change_config('attack', 'False')
         attack_window.open = False
         page.update()
