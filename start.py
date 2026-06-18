@@ -1,20 +1,21 @@
 import os
 import asyncio
+import threading
 from Core.Main import Start
 from Core.TelegramBot import start_telegram_bot
 
-async def main():
-    # Получаем порт из переменной окружения Railway
-    port = int(os.environ.get("PORT", 9876))
-
-    # Запускаем Telegram-бота в фоне
-    telegram_task = asyncio.create_task(start_telegram_bot())
-
-    # Запускаем веб-интерфейс
-    Start(web=True, port=port)
-
-    # Ждём завершения работы Telegram-бота (это никогда не произойдёт, пока бот работает)
-    await telegram_task
+def run_telegram_bot():
+    """Run telegram bot in its own event loop in a thread"""
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(start_telegram_bot())
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    port = int(os.environ.get("PORT", 9876))
+
+    # Telegram bot в отдельном потоке со своим event loop'ом
+    t = threading.Thread(target=run_telegram_bot, daemon=True)
+    t.start()
+
+    # Веб-интерфейс (Flet) — блокирующий вызов
+    Start(web=True, port=port)

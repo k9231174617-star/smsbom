@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Инициализируем бота
-bot = Bot(token=os.getenv("TELEGRAM_BOT_TOKEN"))
+bot = Bot(token=os.getenv("TELEGRAM_BOT_TOKEN") or "")
 dp = Dispatcher()
 
 # Хранилище для активных атак
