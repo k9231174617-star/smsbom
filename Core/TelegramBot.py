@@ -366,7 +366,13 @@ async def handle_text(message: types.Message):
         type_map = {"📱 SMS": "SMS", "📞 Звонки": "CALL", "🔀 MIX": "MIX"}
         atype = type_map[text]
         set_attack_type(uid, atype)
-        await message.answer(f"✅ Режим изменён на **{atype}**", reply_markup=main_keyboard())
+        await message.answer(
+            f"✅ Режим изменён на **{atype}**\n\n"
+            "Введи номер и время атаки:\n"
+            "▪️ Пример: `79123456789 5` (номер + минуты)\n"
+            "▪️ Или просто номер: `79123456789` (3 мин по умолчанию)",
+            reply_markup=main_keyboard()
+        )
     
     elif text == "⚡ FlashCall":
         set_attack_type(uid, "FLASHCALL")
@@ -453,33 +459,68 @@ async def handle_text(message: types.Message):
     else:
         # Парсим ввод пользователя
         parts = text.split()
+        if not parts:
+            await message.answer("Используй кнопки ниже 👇", reply_markup=main_keyboard())
+            return
+        
         attack_type = get_attack_type(uid)
         
+        # LOOKUP — достаточно одного номера
         if attack_type == "LOOKUP" and len(parts) == 1:
-            # Пробив — достаточно номера
             nums = re.findall(r'\+?\d+', parts[0])
             if nums:
                 await run_attack(message, parts[0], "0", attack_type="LOOKUP")
                 return
-        
-        if attack_type == "EMAIL" and len(parts) >= 1:
-            if '@' in parts[0]:
-                email = parts[0]
-                minutes = parts[1] if len(parts) > 1 and parts[1].isdigit() else "3"
-                await run_attack(message, email, minutes, attack_type="EMAIL")
+            else:
+                await message.answer(
+                    "❌ Введи номер телефона!\nПример: `79123456789`",
+                    reply_markup=main_keyboard()
+                )
                 return
         
-        if len(parts) >= 2:
-            minutes = parts[-1]
-            target = " ".join(parts[:-1])
-            if minutes.isdigit() and 1 <= int(minutes) <= 10:
-                nums = re.findall(r'\+?\d+', target)
-                if nums or '@' in target:
-                    await run_attack(message, target, minutes)
-                    return
+        # EMAIL
+        if attack_type == "EMAIL":
+            if len(parts) >= 1 and '@' in parts[0]:
+                email_addr = parts[0]
+                mins = parts[1] if len(parts) > 1 and parts[1].isdigit() else "3"
+                await run_attack(message, email_addr, mins, attack_type="EMAIL")
+                return
+            else:
+                await message.answer(
+                    "❌ Введи email!\nПример: `test@mail.ru 5`",
+                    reply_markup=main_keyboard()
+                )
+                return
         
+        # Номер + время (или только номер — дефолт 3 мин)
+        # Ищем время среди частей: если число от 1 до 10 — это минуты
+        target_parts = []
+        time_str = None
+        for p in parts:
+            if p.isdigit() and 1 <= int(p) <= 10 and time_str is None:
+                time_str = p
+            else:
+                target_parts.append(p)
+        
+        target = " ".join(target_parts)
+        minutes = time_str or "3"
+        
+        nums = re.findall(r'\+?\d+', target)
+        if nums:
+            await run_attack(message, target, minutes)
+            return
+        
+        # Если ничего не подошло — показываем ошибку с подсказкой
         await message.answer(
-            "Используй кнопки ниже 👇", reply_markup=main_keyboard())
+            "❌ **Не могу распознать команду.**\n\n"
+            "**Формат:**\n"
+            "▪️ `79123456789 5` — номер + минуты (1-10)\n"
+            "▪️ `79123456789` — только номер (3 мин)\n"
+            "▪️ `+79123456789,+79876543210 3` — несколько номеров\n\n"
+            f"**Текущий режим:** {attack_type}\n"
+            "Выбери режим кнопками ниже 👇",
+            reply_markup=main_keyboard()
+        )
 
 async def start_telegram_bot():
     await dp.start_polling(bot, handle_signals=False)
