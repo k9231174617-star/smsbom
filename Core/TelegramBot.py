@@ -165,18 +165,27 @@ async def run_attack(message: types.Message, numbers_str: str, minutes: str,
                 results = await gather(*tasks, return_exceptions=True)
             else:
                 results = []
+        # Показываем результаты по каждому сервису
+        lu_services = lookup_urls(numbers[0])
+        svc_lines = []
+        for url_data, r in zip(lu_services, results):
+            site = url_data["info"]["website"]
+            if isinstance(r, tuple) and r[0] < 400:
+                svc_lines.append(f"  ✅ {site}")
+            else:
+                svc_lines.append(f"  ❌ {site}")
 
-        ok = sum(1 for r in results if r is not None and isinstance(r, tuple) and r[0] < 400)
-        fail = sum(1 for r in results if r is None or (isinstance(r, tuple) and r[0] >= 400))
+        total_ok = sum(1 for r in results if isinstance(r, tuple) and r[0] < 400)
+        total_fail = sum(1 for r in results if r is None or (isinstance(r, tuple) and r[0] >= 400))
 
-        await message.answer(
-            f"🔍 **Поиск по номеру** `{numbers[0]}`\n\n"
-            f"🔍 Запросов: {len(results)}\n"
-            f"✅ Ответили: {ok}\n"
-            f"❌ Ошибок: {fail}\n\n"
-            f"💡 Данные в service_registry.json",
-            reply_markup=main_keyboard()
-        )
+        msg = f"🔍 **Поиск по номеру** `{numbers[0]}`\n"
+        msg += f"\n**Результаты ({len(svc_lines)} сервисов):**\n"
+        msg += "\n".join(svc_lines[:20])
+        if len(svc_lines) > 20:
+            msg += f"\n... и ещё {len(svc_lines) - 20}"
+        msg += f"\n\n✅ Найдено: {total_ok}\n❌ Нет данных: {total_fail}"
+
+        await message.answer(msg, reply_markup=main_keyboard())
         return
     if attack_type == "EMAIL":
         email = numbers_str
