@@ -151,6 +151,52 @@ async def run_attack(message: types.Message, numbers_str: str, minutes: str,
             await message.answer("❌ Некорректный номер!")
             return
 
+        phone = numbers[0]
+        gc_token = os.environ.get("GETCONTACT_TOKEN", "")
+        gc_key = os.environ.get("GETCONTACT_AES_KEY", "")
+
+        if gc_token and gc_key:
+            try:
+                from Core.GetContactAPI import GetContactAPI
+                gc = GetContactAPI(gc_token, gc_key)
+                search_result = await gc.search(phone)
+                tags_result = await gc.get_tags(phone)
+
+                lines = ["📱 **Результат пробива:**\n"]
+                profile = search_result.get("response", {}).get("profile", {}) if "response" in search_result else search_result.get("profile", {})
+                if profile:
+                    name = profile.get("displayName") or profile.get("name") or ""
+                    surname = profile.get("surname") or ""
+                    country = profile.get("country") or ""
+                    tag_count = profile.get("tagCount", 0)
+                    full_name = f"{name} {surname}".strip()
+                    if full_name:
+                        lines.append(f"👤 **Имя:** {full_name}")
+                    if country:
+                        lines.append(f"🌍 **Страна:** {country}")
+                    if tag_count:
+                        lines.append(f"🏷 **Тегов:** {tag_count}")
+
+                tags = tags_result.get("response", {}).get("tags", []) if "response" in tags_result else tags_result.get("tags", [])
+                if tags:
+                    tag_names = [t.get("tag", "") for t in tags[:15] if t.get("tag")]
+                    if tag_names:
+                        lines.append("\n📖 **Телефонная книга:**")
+                        lines.append(", ".join(tag_names))
+                        if len(tags) > 15:
+                            lines.append(f"... и ещё {len(tags) - 15}")
+
+                if len(lines) <= 2:
+                    lines.append("\n❌ Информация не найдена")
+
+                await message.answer("\n".join(lines), reply_markup=main_keyboard())
+                return
+            except ImportError:
+                pass
+            except Exception as e:
+                await message.answer(f"❌ Ошибка GetContact: {{e}}", reply_markup=main_keyboard())
+                return
+
         from Core.Attack.Services_Lookup import lookup_urls
         from Core.Run import make_request
         from aiohttp import ClientSession, ClientTimeout
@@ -159,17 +205,17 @@ async def run_attack(message: types.Message, numbers_str: str, minutes: str,
         timeout = ClientTimeout(total=15)
         async with ClientSession(timeout=timeout) as session:
             tasks = []
-            for url_data in lookup_urls(numbers[0]):
+            for url_data in lookup_urls(phone):
                 tasks.append(ensure_future(make_request(session, url_data, "LOOKUP")))
             if tasks:
                 results = await gather(*tasks, return_exceptions=True)
             else:
                 results = []
-        # Показываем результаты по каждому сервису
-        lu_services = lookup_urls(numbers[0])
+
+        lu_services = lookup_urls(phone)
         svc_lines = []
         for url_data, r in zip(lu_services, results):
-            site = url_data["info"]["website"]
+            site = url_data['info']['website']
             if isinstance(r, tuple) and r[0] < 400:
                 svc_lines.append(f"  ✅ {site}")
             else:
@@ -178,7 +224,7 @@ async def run_attack(message: types.Message, numbers_str: str, minutes: str,
         total_ok = sum(1 for r in results if isinstance(r, tuple) and r[0] < 400)
         total_fail = sum(1 for r in results if r is None or (isinstance(r, tuple) and r[0] >= 400))
 
-        msg = f"🔍 **Поиск по номеру** `{numbers[0]}`\n"
+        msg = f"🔍 **Поиск по номеру** \`{phone}\`\n\n"
         msg += f"\n**Результаты ({len(svc_lines)} сервисов):**\n"
         msg += "\n".join(svc_lines[:20])
         if len(svc_lines) > 20:
@@ -187,6 +233,8 @@ async def run_attack(message: types.Message, numbers_str: str, minutes: str,
 
         await message.answer(msg, reply_markup=main_keyboard())
         return
+
+
     if attack_type == "EMAIL":
         email = numbers_str
         numbers = ["0000000000"]
