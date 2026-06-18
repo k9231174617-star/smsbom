@@ -57,6 +57,7 @@ async def attack_command(message: types.Message):
 
 async def run_attack(message: types.Message, number: str, replay: str):
     user_id = message.from_user.id
+    chat_id = message.chat.id
     if not number.isdigit() or not replay.isdigit():
         await message.answer("❌ Номер и повторы должны быть числами!")
         return
@@ -68,9 +69,33 @@ async def run_attack(message: types.Message, number: str, replay: str):
 
     from Core.Run import start_async_attacks
     from threading import Thread
+    import asyncio
+
     def run():
-        start_async_attacks(number, replay)
-        active_attacks[user_id]["status"] = "completed"
+        try:
+            start_async_attacks(number, replay)
+            if active_attacks.get(user_id, {}).get("status") == "stopped":
+                return
+            active_attacks[user_id]["status"] = "completed"
+            asyncio.run(bot.send_message(
+                chat_id,
+                f"✅ **Атака завершена!**\n\n"
+                f"📱 Номер: `{number}`\n"
+                f"🔄 Повторов: `{replay}`\n"
+                f"📊 Статус: ✅ Выполнено",
+                parse_mode="Markdown"
+            ))
+        except Exception as e:
+            active_attacks[user_id]["status"] = "error"
+            try:
+                asyncio.run(bot.send_message(
+                    chat_id,
+                    f"❌ **Ошибка при выполнении атаки:**\n`{e}`",
+                    parse_mode="Markdown"
+                ))
+            except:
+                pass
+
     Thread(target=run, daemon=True).start()
 
     await message.answer(
